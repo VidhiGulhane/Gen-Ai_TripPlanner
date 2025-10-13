@@ -1,118 +1,191 @@
-import React from "react";
+import React, { useState } from "react";
 
-// You will create this card component in Step 3
-import OptionCard from "./OptionCard";
+const CreateTrip = () => {
+  const [destination, setDestination] = useState("");
+  const [days, setDays] = useState("");
+  const [budget, setBudget] = useState("");
+  const [traveler, setTraveler] = useState("");
+  const [itinerary, setItinerary] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-function CreateTrip() {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setItinerary(null);
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/plan-trip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          destination,
+          days: Number(days),
+          budget,
+          travelers: traveler,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        setItinerary(data.itinerary);
+      } else {
+        setError(data.message || "Failed to generate itinerary");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Error connecting to backend");
+    }
+
+    setLoading(false);
+  };
+
   return (
-    // Main content area, centered and with padding
-    <div className="flex flex-col items-center p-8 bg-white min-h-screen">
-      {/* 1. Header Text Section (Image 2dcec2.png) */}
-      <div className="text-center mb-10 max-w-xl">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          Tell us your travel preferences 🌴✈️
-        </h1>
-        <p className="text-gray-600">
-          Just provide some basic information, and our trip planner will
-          generate a customized itinerary based on your preferences.
-        </p>
-      </div>
+    <div className="flex flex-col items-center justify-center py-10 px-6 bg-gray-50 min-h-screen">
+      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          ✈️ Plan Your Next Adventure
+        </h2>
 
-      {/* 2. The Main Form Container */}
-      <div className="w-full max-w-4xl">
-        {/* --- Question 1: Destination --- */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">
-            What is destination of choice?
-          </h2>
-          {/* Destination Dropdown/Input */}
-          <input
-            type="text"
-            placeholder="New York, NY, USA"
-            className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-white text-gray-900"
-            // In a real app, this would be a search/select component
-            defaultValue="New York, NY, USA"
-          />
-        </div>
-
-        {/* --- Question 2: Duration --- */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">
-            How many days are you planning your trip?
-          </h2>
-          {/* Duration Input */}
-          <input
-            type="number"
-            placeholder="2"
-            className="w-full p-3 border border-white-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-white text-gray-900"
-            defaultValue="2"
-            min="1"
-          />
-        </div>
-
-        {/* --- Question 3: Budget (Image 2dcbf1.png) --- */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">What Is Your Budget?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <OptionCard
-              emoji="💵"
-              title="Cheap"
-              subtitle="Stay conscious of costs"
-              isSelected={false} // Set one as selected initially
-            />
-            <OptionCard
-              emoji="💰"
-              title="Moderate"
-              subtitle="Keep cost on the average side"
-              isSelected={false}
-            />
-            <OptionCard
-              emoji="💎"
-              title="Luxury"
-              subtitle="Don't worry about cost"
-              isSelected={false}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Destination */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Destination</label>
+            <input
+              type="text"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              placeholder="e.g. Paris"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              required
             />
           </div>
-        </div>
 
-        {/* --- Question 4: Travel Companions (Image 2dcbf1.png) --- */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">
-            Who do you plan on traveling with on your next adventure?
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <OptionCard
-              emoji="✈️"
-              title="Just Me"
-              subtitle="A sole traveler in exploration"
-            />
-            <OptionCard
-              emoji="🥂"
-              title="A Couple"
-              subtitle="Two travelers in tandem"
-            />
-            <OptionCard
-              emoji="👨‍👩‍👧‍👦"
-              title="Family"
-              subtitle="A group of fun loving adv"
-            />
-            <OptionCard
-              emoji="⛵"
-              title="Friends"
-              subtitle="A bunch of thrill-seekers"
+          {/* Days */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-1">Number of Days</label>
+            <input
+              type="number"
+              value={days}
+              onChange={(e) => setDays(e.target.value)}
+              placeholder="e.g. 5"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
+              required
             />
           </div>
-        </div>
-      </div>
 
-      {/* 3. Generate Trip Button (Fixed at bottom or placed at end) */}
-      <div className="mt-10 mb-20">
-        <button className="px-8 py-3 bg-black text-white text-lg font-medium rounded-md shadow-lg hover:bg-gray-800 transition duration-150">
-          Generate Trip
-        </button>
+          {/* Budget */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-2">Budget</label>
+            <div className="grid grid-cols-3 gap-3">
+              {["Cheap", "Moderate", "Luxury"].map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  onClick={() => setBudget(option)}
+                  className={`border rounded-lg p-3 text-sm font-medium transition ${
+                    budget === option
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "border-gray-300 bg-white hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Traveler */}
+          <div>
+            <label className="block font-medium text-gray-700 mb-2">Traveler Type</label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {["Just Me", "A Couple", "Family", "Friends"].map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  onClick={() => setTraveler(option)}
+                  className={`border rounded-lg p-3 text-sm font-medium transition ${
+                    traveler === option
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "border-gray-300 bg-white hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading || !budget || !traveler}
+            className={`w-full rounded-lg py-3 font-semibold transition ${
+              loading || !budget || !traveler
+                ? "bg-blue-400 cursor-not-allowed text-white"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            {loading ? "Planning your trip..." : "Generate Itinerary"}
+          </button>
+        </form>
+
+        {/* Error */}
+        {error && <p className="mt-4 text-red-600">{error}</p>}
+
+        {/* Itinerary Display */}
+        {itinerary && (
+          <div className="mt-8 space-y-6">
+            {/* Summary */}
+            {itinerary.summary && (
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+                <h3 className="text-xl font-bold mb-2">Trip Summary</h3>
+                <p>{itinerary.summary}</p>
+              </div>
+            )}
+
+            {/* Estimated cost */}
+            {itinerary.estimated_cost && (
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+                <h3 className="text-xl font-bold mb-2">Estimated Cost</h3>
+                <p>{itinerary.estimated_cost}</p>
+              </div>
+            )}
+
+            {/* Transport suggestions */}
+            {itinerary.transport_suggestions && (
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+                <h3 className="text-xl font-bold mb-2">Transport Suggestions</h3>
+                <p>{itinerary.transport_suggestions}</p>
+              </div>
+            )}
+
+            {/* Days */}
+            {itinerary.days?.map((day) => (
+              <div
+                key={day.day}
+                className="bg-white p-6 rounded-xl shadow-md border border-gray-200"
+              >
+                <h4 className="text-lg font-bold mb-2">
+                  Day {day.day}: {day.title}
+                </h4>
+                <p><span className="font-semibold">Morning:</span> {day.morning}</p>
+                <p><span className="font-semibold">Afternoon:</span> {day.afternoon}</p>
+                <p><span className="font-semibold">Evening:</span> {day.evening}</p>
+                {day.tips && (
+                  <p className="mt-2 text-sm text-gray-600">
+                    <span className="font-semibold">Tip:</span> {day.tips}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default CreateTrip;
