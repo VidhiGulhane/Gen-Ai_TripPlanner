@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -18,3 +19,6 @@ If you are developing a production application, we recommend using TypeScript wi
 =======
 # ai-travel-planner
 >>>>>>> ea4e128e02166561d70e4187c5a0a6b64a7f9f78
+=======
+# Major-project
+>>>>>>> 0450f3c34b1dfb4680177a1387b801105c516f95
