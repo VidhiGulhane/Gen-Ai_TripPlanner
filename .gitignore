@@ -22,3 +22,52 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Python environment files
+*.egg-info/
+*.egg
+*.dist-info/
+
+# Distribution / packaging
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Pickle or temporary data files (ignore if you don't want to track them)
+*.pkl
+
+# Optional: cache or temp folders
+__pycache__/
+*.tmp
+*.bak
+
+# If you have local .env or config files
+.env

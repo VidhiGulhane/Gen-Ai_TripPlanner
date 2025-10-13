@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   MapPinIcon,
   CalendarIcon,
   ArrowRightIcon,
-  ChevronDownIcon, // Added for the dropdown look
+  ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 
 // Define the content for the Budget options
@@ -56,15 +57,39 @@ const travelerOptions = [
   },
 ];
 
+// Define a base list of common destinations to show in the dropdown
+const commonDestinations = [
+  "Taj Mahal, India",
+  "Golden Temple, India",
+  "India Gate, India",
+  "Hawa Mahal, India",
+  "New York, NY, USA",
+  "Paris, France",
+  "Tokyo, Japan",
+  "London, UK",
+];
+
 const CreateTrip = () => {
-  const [destination, setDestination] = useState("New York, NY, USA"); // Pre-filled to match image
-  const [days, setDays] = useState("3"); // Pre-filled to match image
-  const [budget, setBudget] = useState("Cheap"); // Selected to match image
+  const location = useLocation();
+
+  // State is initialized with the destination passed from the Hero page, or defaults to an empty string.
+  const [destination, setDestination] = useState(
+    location.state?.destination || ""
+  );
+  const [days, setDays] = useState("3");
+  const [budget, setBudget] = useState("Cheap");
   const [traveler, setTraveler] = useState("");
-  const [itinerary, setItinerary] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [itinerary, setItinerary] = useState(null);  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // This effect listens for changes in the navigation state and updates the destination if a new one is passed.
+  useEffect(() => {
+    if (location.state?.destination) {
+      setDestination(location.state.destination);
+    }
+  }, [location.state]);
+
+  // This function remains UNCHANGED. It correctly points to your original Node.js backend.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -86,7 +111,7 @@ const CreateTrip = () => {
       else setError(data.message || "Failed to generate itinerary");
     } catch (err) {
       console.error(err);
-      setError("Error connecting to backend");
+      setError("Error connecting to the trip planning server.");
     }
     setLoading(false);
   };
@@ -100,56 +125,42 @@ const CreateTrip = () => {
     green: {
       bg: "bg-green-100",
       border: "border-green-400",
-      ring: "ring-green-400",
-      text: "text-green-700",
       selectedBg: "bg-green-600",
       selectedBorder: "border-green-600",
     },
     yellow: {
       bg: "bg-yellow-100",
       border: "border-yellow-400",
-      ring: "ring-yellow-400",
-      text: "text-yellow-700",
       selectedBg: "bg-yellow-600",
       selectedBorder: "border-yellow-600",
     },
     purple: {
       bg: "bg-purple-100",
       border: "border-purple-400",
-      ring: "ring-purple-400",
-      text: "text-purple-700",
       selectedBg: "bg-purple-600",
       selectedBorder: "border-purple-600",
     },
     blue: {
       bg: "bg-blue-100",
       border: "border-blue-400",
-      ring: "ring-blue-400",
-      text: "text-blue-700",
       selectedBg: "bg-blue-600",
       selectedBorder: "border-blue-600",
     },
     pink: {
       bg: "bg-pink-100",
       border: "border-pink-400",
-      ring: "ring-pink-400",
-      text: "text-pink-700",
       selectedBg: "bg-pink-600",
       selectedBorder: "border-pink-600",
     },
     red: {
       bg: "bg-red-100",
       border: "border-red-400",
-      ring: "ring-red-400",
-      text: "text-red-700",
       selectedBg: "bg-red-600",
       selectedBorder: "border-red-600",
     },
     indigo: {
       bg: "bg-indigo-100",
       border: "border-indigo-400",
-      ring: "ring-indigo-400",
-      text: "text-indigo-700",
       selectedBg: "bg-indigo-600",
       selectedBorder: "border-indigo-600",
     },
@@ -162,10 +173,6 @@ const CreateTrip = () => {
       <Icon className="w-6 h-6 text-blue-500" />
       {children}
     </h3>
-  );
-
-  const SectionTitle = ({ children }) => (
-    <h4 className="text-lg font-medium text-gray-600 mb-2">{children}</h4>
   );
 
   const SelectInput = ({ value, onChange, placeholder, options }) => (
@@ -196,7 +203,6 @@ const CreateTrip = () => {
     icon,
     description,
     colorKey,
-    isBudget,
   }) => {
     const classes = colorClasses[colorKey];
     const isSelected = selected === option;
@@ -209,7 +215,7 @@ const CreateTrip = () => {
           isSelected
             ? `${classes.selectedBg} text-white ${classes.selectedBorder} border-4`
             : `border-gray-200 bg-white hover:${classes.bg} text-gray-700`
-        } ${isBudget ? "col-span-1" : "col-span-1"}`} // Adjusting grid span for traveler for a more condensed look
+        }`}
       >
         <div className={`text-3xl mb-1 ${isSelected ? "text-white" : ""}`}>
           {icon}
@@ -230,6 +236,13 @@ const CreateTrip = () => {
     );
   };
 
+  // Create a dynamic list of options for the dropdown.
+  // This combines the common destinations with the current destination from the state.
+  // The 'Set' automatically handles duplicates if the destination is already in the common list.
+  const destinationOptions = Array.from(
+    new Set([...commonDestinations, destination].filter(Boolean))
+  );
+
   // --- Main Component Render ---
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 min-h-screen">
@@ -242,18 +255,14 @@ const CreateTrip = () => {
           {/* Destination */}
           <div className="space-y-4">
             <QuestionTitle icon={MapPinIcon}>
-              What is destination of choice?
+              What is your destination of choice?
             </QuestionTitle>
             <SelectInput
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              placeholder="Select a destination"
-              options={[
-                "New York, NY, USA",
-                "Paris, France",
-                "Tokyo, Japan",
-                "London, UK",
-              ]} // Example list
+              placeholder="Select or upload a destination"
+              // Use the new dynamic options list
+              options={destinationOptions}
             />
           </div>
 
@@ -289,7 +298,6 @@ const CreateTrip = () => {
                   icon={option.icon}
                   description={option.description}
                   colorKey={option.color}
-                  isBudget={true}
                 />
               ))}
             </div>
@@ -312,7 +320,6 @@ const CreateTrip = () => {
                   icon={option.icon}
                   description={option.description}
                   colorKey={option.color}
-                  isBudget={false}
                 />
               ))}
             </div>
@@ -342,14 +349,13 @@ const CreateTrip = () => {
           </p>
         )}
 
-        {/* Itinerary Display - Using original structure for functionality */}
+        {/* Itinerary Display */}
         {itinerary && (
           <div className="mt-10 space-y-6">
             <h3 className="text-3xl font-bold text-blue-700 border-b pb-3 mb-6">
               Your Generated Itinerary
             </h3>
 
-            {/* Summary */}
             {itinerary.summary && (
               <div className="bg-blue-50 p-5 rounded-xl shadow-inner border-l-4 border-blue-400">
                 <h3 className="text-xl font-bold mb-2 text-blue-700">
@@ -359,7 +365,6 @@ const CreateTrip = () => {
               </div>
             )}
 
-            {/* Estimated cost */}
             {itinerary.estimated_cost && (
               <div className="bg-yellow-50 p-5 rounded-xl shadow-inner border-l-4 border-yellow-400">
                 <h3 className="text-xl font-bold mb-2 text-yellow-700">
@@ -369,7 +374,6 @@ const CreateTrip = () => {
               </div>
             )}
 
-            {/* Transport suggestions */}
             {itinerary.transport_suggestions && (
               <div className="bg-green-50 p-5 rounded-xl shadow-inner border-l-4 border-green-400">
                 <h3 className="text-xl font-bold mb-2 text-green-700">
@@ -379,7 +383,6 @@ const CreateTrip = () => {
               </div>
             )}
 
-            {/* Days */}
             {itinerary.days?.map((day) => (
               <div
                 key={day.day}
