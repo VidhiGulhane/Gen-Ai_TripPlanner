@@ -1,40 +1,20 @@
+// src/components/ui/custom/Header.jsx
 import React from "react";
 
 function Header() {
   return (
-    // Outer container: full width, white background, shadow, padding, and Flexbox for alignment
-    <div className="flex justify-between items-center p-4 md:p-6 shadow-sm bg-white">
-      {/* Left side: Logo and Text */}
-      <div className="flex items-center space-x-2">
-        {/* SVG Icon (The red alert triangle is from a common library, here as raw SVG) */}
-        <svg
-          className="h-8 w-8 text-red-600"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-          />
-        </svg>
-        <span className="text-xl font-bold text-gray-800">Logoipsum</span>
-      </div>
+    <header className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-md z-50">
+      <div className="flex justify-between items-center p-3 md:p-4 max-w-7xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-purple-600 font-[Great_Vibes,cursive] tracking-wide">
+          VisionMate
+        </h1>
 
-      {/* Right side: Sign In Button */}
-      <div>
-        <button
-          className="text-sm font-medium text-skyblue
-        -800 border border-gray-300 py-1.5 px-4 rounded-lg hover:bg-gray-50 transition duration-150 bg-white text-gray-900"
-        >
+        <button className="text-sm font-medium border border-gray-300 py-1.5 px-4 rounded-lg hover:bg-gray-50 transition duration-150 bg-white text-gray-900 shadow-sm">
           Sign In
         </button>
       </div>
-    </div>
+    </header>
   );
 }
 
-export default Header; // <--- The component is correctly exported
+export default Header;
