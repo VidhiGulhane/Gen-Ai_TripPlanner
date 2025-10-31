@@ -9,87 +9,37 @@ import {
 
 // Define the content for the Budget options
 const budgetOptions = [
-  {
-    name: "Cheap",
-    icon: "💵",
-    description: "Stay conscious of costs",
-    color: "green",
-  },
-  {
-    name: "Moderate",
-    icon: "💰",
-    description: "Keep cost on the average side",
-    color: "yellow",
-  },
-  {
-    name: "Luxury",
-    icon: "🥂",
-    description: "Don't worry about cost",
-    color: "purple",
-  },
+  { name: "Cheap", icon: "💵", description: "Stay conscious of costs", color: "green" },
+  { name: "Moderate", icon: "💰", description: "Keep cost on the average side", color: "yellow" },
+  { name: "Luxury", icon: "🥂", description: "Don't worry about cost", color: "purple" },
 ];
 
 // Define the content for the Traveler options
 const travelerOptions = [
-  {
-    name: "Just Me",
-    icon: "✈️",
-    description: "A sole traveler in exploration",
-    color: "blue",
-  },
-  {
-    name: "A Couple",
-    icon: "🥂",
-    description: "Two travelers in tandem",
-    color: "pink",
-  },
-  {
-    name: "Family",
-    icon: "🏡",
-    description: "A group of fun loving adv...",
-    color: "red",
-  },
-  {
-    name: "Friends",
-    icon: "👯",
-    description: "Shared adventures and memories",
-    color: "indigo",
-  },
-];
-
-// Define a base list of common destinations to show in the dropdown
-const commonDestinations = [
-  "Taj Mahal, India",
-  "Golden Temple, India",
-  "India Gate, India",
-  "Hawa Mahal, India",
-  "New York, NY, USA",
-  "Paris, France",
-  "Tokyo, Japan",
-  "London, UK",
+  { name: "Just Me", icon: "✈️", description: "A sole traveler in exploration", color: "blue" },
+  { name: "A Couple", icon: "🥂", description: "Two travelers in tandem", color: "pink" },
+  { name: "Family", icon: "🏡", description: "A group of fun loving adv...", color: "red" },
+  { name: "Friends", icon: "👯", description: "Shared adventures and memories", color: "indigo" },
 ];
 
 const CreateTrip = () => {
   const location = useLocation();
 
   // State is initialized with the destination passed from the Hero page, or defaults to an empty string.
-  const [destination, setDestination] = useState(
-    location.state?.destination || ""
-  );
+  const [destination, setDestination] = useState(location.state?.destination || "");
   const [days, setDays] = useState("3");
   const [budget, setBudget] = useState("Cheap");
   const [traveler, setTraveler] = useState("");
-  const [itinerary, setItinerary] = useState(null);  const [loading, setLoading] = useState(false);
+  const [itinerary, setItinerary] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // This effect listens for changes in the navigation state and updates the destination if a new one is passed.
   useEffect(() => {
     if (location.state?.destination) {
       setDestination(location.state.destination);
     }
   }, [location.state]);
 
-  // This function remains UNCHANGED. It correctly points to your original Node.js backend.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -116,57 +66,17 @@ const CreateTrip = () => {
     setLoading(false);
   };
 
-  const getDayOptions = () => {
-    return Array.from({ length: 14 }, (_, i) => i + 1); // 1 to 14 days
-  };
+  const getDayOptions = () => Array.from({ length: 14 }, (_, i) => i + 1);
 
-  // Helper function to map color names to Tailwind classes
   const colorClasses = {
-    green: {
-      bg: "bg-green-100",
-      border: "border-green-400",
-      selectedBg: "bg-green-600",
-      selectedBorder: "border-green-600",
-    },
-    yellow: {
-      bg: "bg-yellow-100",
-      border: "border-yellow-400",
-      selectedBg: "bg-yellow-600",
-      selectedBorder: "border-yellow-600",
-    },
-    purple: {
-      bg: "bg-purple-100",
-      border: "border-purple-400",
-      selectedBg: "bg-purple-600",
-      selectedBorder: "border-purple-600",
-    },
-    blue: {
-      bg: "bg-blue-100",
-      border: "border-blue-400",
-      selectedBg: "bg-blue-600",
-      selectedBorder: "border-blue-600",
-    },
-    pink: {
-      bg: "bg-pink-100",
-      border: "border-pink-400",
-      selectedBg: "bg-pink-600",
-      selectedBorder: "border-pink-600",
-    },
-    red: {
-      bg: "bg-red-100",
-      border: "border-red-400",
-      selectedBg: "bg-red-600",
-      selectedBorder: "border-red-600",
-    },
-    indigo: {
-      bg: "bg-indigo-100",
-      border: "border-indigo-400",
-      selectedBg: "bg-indigo-600",
-      selectedBorder: "border-indigo-600",
-    },
+    green: { bg: "bg-green-100", border: "border-green-400", selectedBg: "bg-green-600", selectedBorder: "border-green-600" },
+    yellow: { bg: "bg-yellow-100", border: "border-yellow-400", selectedBg: "bg-yellow-600", selectedBorder: "border-yellow-600" },
+    purple: { bg: "bg-purple-100", border: "border-purple-400", selectedBg: "bg-purple-600", selectedBorder: "border-purple-600" },
+    blue: { bg: "bg-blue-100", border: "border-blue-400", selectedBg: "bg-blue-600", selectedBorder: "border-blue-600" },
+    pink: { bg: "bg-pink-100", border: "border-pink-400", selectedBg: "bg-pink-600", selectedBorder: "border-pink-600" },
+    red: { bg: "bg-red-100", border: "border-red-400", selectedBg: "bg-red-600", selectedBorder: "border-red-600" },
+    indigo: { bg: "bg-indigo-100", border: "border-indigo-400", selectedBg: "bg-indigo-600", selectedBorder: "border-indigo-600" },
   };
-
-  // --- Helper components for reusability and clarity ---
 
   const QuestionTitle = ({ icon: Icon, children }) => (
     <h3 className="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
@@ -183,30 +93,18 @@ const CreateTrip = () => {
         className="appearance-none w-full border border-gray-300 bg-white rounded-xl p-3 pr-10 text-gray-800 font-medium cursor-pointer focus:ring-2 focus:ring-blue-400 outline-none transition duration-200 shadow-sm"
         required
       >
-        <option value="" disabled>
-          {placeholder}
-        </option>
+        <option value="" disabled>{placeholder}</option>
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
+          <option key={option} value={option}>{option}</option>
         ))}
       </select>
       <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
     </div>
   );
 
-  const GridButton = ({
-    selected,
-    option,
-    onClick,
-    icon,
-    description,
-    colorKey,
-  }) => {
+  const GridButton = ({ selected, option, onClick, icon, description, colorKey }) => {
     const classes = colorClasses[colorKey];
     const isSelected = selected === option;
-
     return (
       <button
         type="button"
@@ -217,33 +115,13 @@ const CreateTrip = () => {
             : `border-gray-200 bg-white hover:${classes.bg} text-gray-700`
         }`}
       >
-        <div className={`text-3xl mb-1 ${isSelected ? "text-white" : ""}`}>
-          {icon}
-        </div>
-        <div
-          className={`font-bold ${isSelected ? "text-white" : "text-gray-900"}`}
-        >
-          {option}
-        </div>
-        <div
-          className={`mt-1 text-xs ${
-            isSelected ? "text-white/80" : "text-gray-500"
-          }`}
-        >
-          {description}
-        </div>
+        <div className={`text-3xl mb-1 ${isSelected ? "text-white" : ""}`}>{icon}</div>
+        <div className={`font-bold ${isSelected ? "text-white" : "text-gray-900"}`}>{option}</div>
+        <div className={`mt-1 text-xs ${isSelected ? "text-white/80" : "text-gray-500"}`}>{description}</div>
       </button>
     );
   };
 
-  // Create a dynamic list of options for the dropdown.
-  // This combines the common destinations with the current destination from the state.
-  // The 'Set' automatically handles duplicates if the destination is already in the common list.
-  const destinationOptions = Array.from(
-    new Set([...commonDestinations, destination].filter(Boolean))
-  );
-
-  // --- Main Component Render ---
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 min-h-screen">
       <div className="max-w-4xl w-full bg-white rounded-3xl shadow-2xl p-8 sm:p-12 border border-gray-100">
@@ -252,17 +130,18 @@ const CreateTrip = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Destination */}
+          {/* Destination Text Input */}
           <div className="space-y-4">
             <QuestionTitle icon={MapPinIcon}>
               What is your destination of choice?
             </QuestionTitle>
-            <SelectInput
+            <input
+              type="text"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              placeholder="Select or upload a destination"
-              // Use the new dynamic options list
-              options={destinationOptions}
+              placeholder="Type your destination"
+              className="w-full border border-gray-300 bg-white rounded-xl p-3 text-gray-800 font-medium focus:ring-2 focus:ring-blue-400 outline-none transition duration-200 shadow-sm"
+              required
             />
           </div>
 
@@ -358,27 +237,21 @@ const CreateTrip = () => {
 
             {itinerary.summary && (
               <div className="bg-blue-50 p-5 rounded-xl shadow-inner border-l-4 border-blue-400">
-                <h3 className="text-xl font-bold mb-2 text-blue-700">
-                  Trip Summary
-                </h3>
+                <h3 className="text-xl font-bold mb-2 text-blue-700">Trip Summary</h3>
                 <p>{itinerary.summary}</p>
               </div>
             )}
 
             {itinerary.estimated_cost && (
               <div className="bg-yellow-50 p-5 rounded-xl shadow-inner border-l-4 border-yellow-400">
-                <h3 className="text-xl font-bold mb-2 text-yellow-700">
-                  Estimated Cost
-                </h3>
+                <h3 className="text-xl font-bold mb-2 text-yellow-700">Estimated Cost</h3>
                 <p>{itinerary.estimated_cost}</p>
               </div>
             )}
 
             {itinerary.transport_suggestions && (
               <div className="bg-green-50 p-5 rounded-xl shadow-inner border-l-4 border-green-400">
-                <h3 className="text-xl font-bold mb-2 text-green-700">
-                  Transport Suggestions
-                </h3>
+                <h3 className="text-xl font-bold mb-2 text-green-700">Transport Suggestions</h3>
                 <p>{itinerary.transport_suggestions}</p>
               </div>
             )}
@@ -392,29 +265,13 @@ const CreateTrip = () => {
                   Day {day.day}: {day.title}
                 </h4>
                 <div className="space-y-2 text-gray-700">
-                  <p>
-                    <span className="font-semibold text-blue-500">
-                      🌅 Morning:
-                    </span>{" "}
-                    {day.morning}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-orange-500">
-                      🏙️ Afternoon:
-                    </span>{" "}
-                    {day.afternoon}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-purple-500">
-                      🌙 Evening:
-                    </span>{" "}
-                    {day.evening}
-                  </p>
+                  <p><span className="font-semibold text-blue-500">🌅 Morning:</span> {day.morning}</p>
+                  <p><span className="font-semibold text-orange-500">🏙️ Afternoon:</span> {day.afternoon}</p>
+                  <p><span className="font-semibold text-purple-500">🌙 Evening:</span> {day.evening}</p>
                 </div>
                 {day.tips && (
                   <p className="mt-3 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-2 border-gray-300">
-                    <span className="font-bold text-gray-500">💡 Tip:</span>{" "}
-                    {day.tips}
+                    <span className="font-bold text-gray-500">💡 Tip:</span> {day.tips}
                   </p>
                 )}
               </div>
